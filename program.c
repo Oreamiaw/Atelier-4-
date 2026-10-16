@@ -1,15 +1,24 @@
 #include <stdio.h>
 
 #define NB_VALEURS 3
-#define MAX_LONGUEUR 50   /* taille en caractères de la plus grande barre */
+#define MAX_LIGNES 15
 
-/* Affiche n caractères 'x' (sans retour à la ligne) */
-void Nb_de_x(int n)
+/* Affiche la ligne de hauteur y de l'histogramme vertical */
+void afficher_ligne_histov(int valeurs[], int taille, double y)
 {
-    for (int j = 0; j < n; j++)
+    printf("| ");
+    for (int k = 0; k < taille; k++)
     {
-        printf("x");
+        if (valeurs[k] >= y)
+        {
+            printf("xxx ");   /* la barre atteint cette hauteur */
+        }
+        else
+        {
+            printf("    ");   /* pas de barre : 3 espaces + séparateur */
+        }
     }
+    printf("\n");
 }
 
 int main(void)
@@ -26,19 +35,14 @@ int main(void)
         }
     }
 
-    /* ===== AJOUT : calcul de l'échelle ===== */
-    double echelle = (double) MAX_LONGUEUR / maximum;
-
-    /* Affichage de l'histogramme */
-    for (int i = 0; i < NB_VALEURS; i++)
+    /* Affichage ligne par ligne, de haut en bas */
+    for (int i = 0; i < MAX_LIGNES; i++)
     {
-        printf("| ");
-        /* ===== MODIFIÉ : nombre de x mis à l'échelle (arrondi) ===== */
-        Nb_de_x((int) (valeurs[i] * echelle + 0.5));
-        printf(" %d\n", valeurs[i]);
+        double y = (double) maximum * (MAX_LIGNES - i) / MAX_LIGNES;
+        afficher_ligne_histov(valeurs, NB_VALEURS, y);
     }
 
-    printf("+------------------------------------------------------\n");
+    printf("+--------------------------------------\n");
 
     return 0;
 }
